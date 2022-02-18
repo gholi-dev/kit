@@ -173,8 +173,8 @@ export function transform(markdown, renderer = {}) {
 /** @param {string} markdown */
 export function extract_frontmatter(markdown) {
 	const match = /---\r?\n([\s\S]+?)\r?\n---/.exec(markdown);
-	const frontmatter = match[1];
-	const body = markdown.slice(match[0].length);
+	const frontmatter = match ? match[1] : '';
+	const body = match ? markdown.slice(match[0].length) : markdown;
 
 	const metadata = {};
 	frontmatter.split('\n').forEach((pair) => {

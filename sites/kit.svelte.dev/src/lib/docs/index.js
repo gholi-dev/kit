@@ -26,15 +26,14 @@ const base = '../../documentation';
  */
 export function read_file(dir, file) {
 	const match = /\d{2}-(.+)\.md/.exec(file);
-	if (!match) return null;
 
-	const slug = match[1];
+	const slug = match ? match[1] : undefined;
 
 	const markdown = fs.readFileSync(`${base}/${dir}/${file}`, 'utf-8');
 
 	return {
 		file: `${dir}/${file}`,
-		slug: match[1],
+		slug,
 		// third argument is a gross hack to accommodate FAQ
 		...parse(markdown, file, dir === 'faq' ? slug : undefined)
 	};
@@ -69,6 +68,7 @@ export function read(dir, slug) {
 export function read_all(dir) {
 	return fs
 		.readdirSync(`${base}/${dir}`)
+		.filter((file) => /\.md$/.test(file))
 		.map((file) => read_file(dir, file))
 		.filter(Boolean);
 }
